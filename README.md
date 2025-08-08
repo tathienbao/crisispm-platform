@@ -102,4 +102,4 @@ crisispm-platform/
 
 **Vision:** Become the definitive platform for practical project management crisis training, empowering PMs worldwide with confidence to handle any business emergency.
 
-**Mission:** Transform theoretical PM knowledge into practical crisis management skills through AI-powered daily practice.
+**Mission:** Transform theoretical PM knowledge into practical crisis management skills through AI-powered daily practice.# Test change
