@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ WORKFLOW COMPLIANCE REQUIRED
+
+**Before working on CrisisPM Platform, Claude MUST:**
+1. **Read parent workflow**: `/home/tathienbao/swedish-practice/CLAUDE.md` for universal process requirements
+2. **Follow session recovery**: Read `DEVELOPMENT_WORKFLOW.md` to understand current project state  
+3. **Use token optimization**: Check `context7/` cached documentation before Context7 API calls
+4. **Execute git submodule workflow**: Always commit submodule → push → update parent → push parent
+
+**This ensures session continuity and maintains professional development standards.**
+
 ## Project Overview
 
 **CrisisPM** is an AI-powered PM crisis training platform built with Next.js 15, Supabase, and Groq AI. The platform delivers daily crisis scenarios to project managers and provides expert-level AI assessment of their responses.
