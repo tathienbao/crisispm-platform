@@ -44,7 +44,7 @@ export default function LoginPage() {
       }
 
       // Successful authentication - redirect to intended page
-      router.push(redirectTo)
+      router.push(redirectTo as any)
       router.refresh()
       
     } catch (error) {

@@ -200,11 +200,11 @@ export default function SignupPage() {
         {/* TERMS OF SERVICE */}
         <div className="text-sm text-gray-500">
           By creating an account, you agree to our{' '}
-          <Link href="/terms" className="text-blue-600 hover:text-blue-500">
+          <Link href={"/terms" as any} className="text-blue-600 hover:text-blue-500">
             Terms of Service
           </Link>
           {' '}and{' '}
-          <Link href="/privacy" className="text-blue-600 hover:text-blue-500">
+          <Link href={"/privacy" as any} className="text-blue-600 hover:text-blue-500">
             Privacy Policy
           </Link>
         </div>
