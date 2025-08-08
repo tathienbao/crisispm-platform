@@ -1,0 +1,79 @@
+/**
+ * GLOBAL STYLES AND TAILWIND CSS CONFIGURATION
+ * Base styles for the CrisisPM platform including Tailwind directives,
+ * custom CSS variables for theming, and global typography settings.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+ * Color palette and spacing variables that can be used throughout the application.
+ * These align with our professional brand identity and ensure consistent theming.
+ */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
+}
+
+/**
+ * BASE ELEMENT STYLING
+ * Default styling for common HTML elements to ensure consistent typography
+ * and spacing throughout the application without requiring utility classes.
+ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+  
+  p {
+    @apply leading-7;
+  }
+}
+
+/**
+ * COMPONENT UTILITIES
+ * Reusable CSS classes for common UI patterns specific to the CrisisPM platform.
+ * These reduce repetition and ensure consistent styling across components.
+ */
+@layer components {
+  .crisis-card {
+    @apply bg-card text-card-foreground rounded-lg border p-6 shadow-sm;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors;
+  }
+  
+  .input-field {
+    @apply border border-input bg-background px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+  }
+}
