@@ -24,21 +24,23 @@
   # Date handling
   npm install date-fns
   3. Configure Project Structure
-  src/
-  ├── app/                    # Next.js App Router
-  │   ├── (auth)/            # Auth pages
-  │   ├── dashboard/         # User dashboard
-  │   ├── crisis/           # Crisis scenarios
-  │   └── api/              # API routes
-  ├── components/           # React components
-  │   ├── ui/              # shadcn/ui components
-  │   ├── crisis/          # Crisis-specific components
-  │   └── auth/            # Auth components
-  ├── lib/                 # Utilities
-  │   ├── supabase.ts     # Supabase config
-  │   ├── groq.ts         # Groq AI client
-  │   └── utils.ts        # General utilities
-  └── types/              # TypeScript definitions
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # Auth pages
+│   ├── dashboard/         # User dashboard
+│   ├── crisis/           # Crisis scenarios
+│   └── api/              # API routes
+├── components/           # React components
+│   ├── ui/              # shadcn/ui components
+│   ├── crisis/          # Crisis-specific components
+│   └── auth/            # Auth components
+├── lib/                 # Utilities
+│   ├── supabase.ts     # Supabase config
+│   ├── groq.ts         # Groq AI client
+│   └── utils.ts        # General utilities
+└── types/              # TypeScript definitions
+```
 
   Day 3-4: Database & Authentication Setup
 
