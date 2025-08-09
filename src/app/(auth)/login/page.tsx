@@ -1,16 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
 /**
- * LOGIN PAGE COMPONENT
+ * LOGIN FORM COMPONENT (WITH SEARCH PARAMS)
  * Handles user authentication with email/password using Supabase Auth.
  * Includes form validation, error handling, and post-auth redirection.
  */
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/dashboard'
@@ -148,5 +148,21 @@ export default function LoginPage() {
         Form state: {loading ? 'Loading...' : 'Ready'}
       </div>
     </div>
+  )
+}
+
+/**
+ * LOGIN PAGE WRAPPER WITH SUSPENSE
+ * Wraps LoginForm in Suspense boundary to handle useSearchParams() properly
+ */
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center min-h-64">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
