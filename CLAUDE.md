@@ -290,6 +290,55 @@ src/components/
 - **Error Handling**: Comprehensive try/catch with user-friendly messages
 - **Testing**: 3-layer protocol (syntax → environment → end-to-end)
 
+### **Educational Code Explanation Standards**
+
+**Purpose**: Provide comprehensive, interview-style code explanations that help users learn and understand both technical concepts and business context.
+
+#### **Scenario 1: Error Explanation Template**
+Use this template when user encounters errors or asks about fixing issues:
+
+1. **Understanding the Error** - Clear identification of what went wrong
+2. **What's the Problem?** - Step-by-step technical breakdown 
+3. **Why Does This Error Occur?** - System/compiler perspective explanation
+4. **The Solutions** - Multiple approaches with trade-offs:
+   - **Approach 1**: Quick fix (with explanation of when to use)
+   - **Approach 2**: Best practice (with reasoning for long-term benefits)
+   - **Approach 3**: Safest option (with trade-offs explained)
+5. **Why We Avoid X (But Sometimes Use It)** - Design decision context and exceptions
+6. **My Recommendation** - Clear guidance with business/technical rationale
+
+#### **Scenario 2: Code Review/Learning Template**
+Use this template when user asks about understanding existing code:
+
+1. **What This Code Does** - High-level purpose and role in the application
+2. **How It Works** - Step-by-step breakdown of the logic flow
+3. **Why This Approach** - Design decisions and alternatives that were considered
+4. **Business Context** - How this connects to user value, revenue, or competitive advantage
+5. **Potential Improvements** - Code quality suggestions and optimization opportunities
+6. **Interview-Style Analysis** - "What would happen if...?" scenarios for deeper learning
+
+#### **When to Use Each Template**
+- **Error Template**: TypeScript errors, runtime bugs, build failures, test failures
+- **Learning Template**: "Explain this line", "Why did we structure this way?", "How does this work?"
+
+#### **Educational Goals**
+- **Interview Preparation**: Structure explanations like technical interviews
+- **Deep Understanding**: Connect code to business objectives and system design
+- **Multiple Perspectives**: Show different solution approaches and their trade-offs
+- **Practical Learning**: Explain not just what code does, but why decisions were made
+
+#### **Example Applications**
+```typescript
+// User asks: "Explain line 245 in crisis-engine.ts"
+// Use Learning Template:
+// 1. What This Code Does: "This line generates a unique scenario ID..."
+// 2. How It Works: "It combines category, template, and variables..."
+// 3. Why This Approach: "We need unique IDs to prevent duplicate scenarios..."
+// 4. Business Context: "This supports our 44,928 unique scenarios value prop..."
+// 5. Potential Improvements: "Could add timestamp for better uniqueness..."
+// 6. Interview Analysis: "What if two users generate scenarios simultaneously?"
+```
+
 ### **Git Workflow Standards**
 ```bash
 # Professional commit workflow:
