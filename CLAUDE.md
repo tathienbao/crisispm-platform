@@ -12,22 +12,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **This ensures session continuity and maintains professional development standards.**
 
-## Project Overview
+## 🎯 Project Overview
 
 **CrisisPM** is an AI-powered PM crisis training platform built with Next.js 15, Supabase, and Groq AI. The platform delivers daily crisis scenarios to project managers and provides expert-level AI assessment of their responses.
 
-## Architecture & Tech Stack
+### Business Model & Market Position
+- **Freemium SaaS**: Free tier → $19/month Pro → $99/user Corporate
+- **Market Disruption**: $19/month vs competitors' $500-2000 corporate programs
+- **Unique Value**: 44,928 algorithmic crisis scenarios (13 categories × 8 templates × 432 combinations)
+- **Revenue Target**: $1,834/month profit at 100 users with 10% conversion
 
-### Core Stack
+## 🏗️ Architecture & Tech Stack
+
+### Core Technology Stack
 - **Frontend:** Next.js 15 + TypeScript + Tailwind CSS
 - **Backend:** Supabase (Auth + PostgreSQL + Edge Functions)
 - **AI Assessment:** Groq Llama-3.1-70b-Versatile + Claude-3.5-Sonnet
-- **Payments:** Stripe
+- **Payments:** Stripe subscription management
 - **Deployment:** Vercel
+- **Environment:** fgnosstvcukgdzztsnni.supabase.co (development)
 
-### Key Data Models
+### Critical Data Models
 ```typescript
-// Users: subscription tiers and learning progress
+// Core business entities with production-ready types
 interface User {
   id: string
   email: string
@@ -41,7 +48,7 @@ interface User {
   email_notifications: boolean
 }
 
-// Crisis Scenarios: 13 categories × 8 templates × 432 variations = 44,928 unique scenarios
+// Crisis scenarios: 13 categories × 8 templates × 432 variations = 44,928 unique
 interface CrisisScenario {
   id: string
   category: 'technical' | 'business' | 'resource' | 'team' | 'market' | 
@@ -49,11 +56,13 @@ interface CrisisScenario {
            'communication' | 'quality' | 'international' | 'innovation'
   difficulty: 'beginner' | 'intermediate' | 'advanced'
   template_id: string
+  // 5 variable dimensions for infinite combinations:
   industry: 'tech' | 'healthcare' | 'finance' | 'retail'
   company_size: 'startup' | 'midsize' | 'enterprise'
   severity: 'minor' | 'major' | 'critical'
   timeline: 'hours' | 'days' | 'weeks'
   stakeholder_type: 'internal' | 'external' | 'regulatory' | 'mixed'
+  // Content fields:
   title: string
   description: string
   context: string
@@ -62,121 +71,302 @@ interface CrisisScenario {
   expert_solution: string
   assessment_criteria: object
 }
+
+// AI assessment with 4-dimensional scoring
+interface UserResponse {
+  id: string
+  user_id: string
+  scenario_id: string
+  response: string
+  total_score: number
+  strategy_score: number      // 25% weight
+  communication_score: number // 25% weight  
+  leadership_score: number    // 25% weight
+  execution_score: number     // 25% weight
+  feedback: string
+  improvements: string[]
+  submitted_at: string
+}
 ```
 
-## Development Commands
+## 🚀 Current Development Status
+
+### ✅ **PHASE 1 COMPLETE: Authentication + Database Infrastructure**
+
+#### **Production-Ready Systems:**
+- **Authentication System**: Complete email/password with Supabase Auth
+- **Session Management**: Next.js 15 middleware with automatic token refresh
+- **Route Protection**: Middleware-based security with redirect handling
+- **Database Schema**: All tables created with Row Level Security active
+- **Type Safety**: Complete TypeScript coverage preventing runtime errors
+- **Security Framework**: Enterprise-grade protection with SAFE vs DANGEROUS file separation
+
+#### **Verified Working Components:**
+```typescript
+// Authentication stack (TESTED & OPERATIONAL):
+src/lib/supabase/middleware.ts    // Session management & route protection
+src/lib/supabase/client.ts        // Client-side Supabase integration  
+src/lib/supabase/server.ts        // Server-side operations
+src/app/(auth)/login/page.tsx     // Professional login form
+src/app/(auth)/signup/page.tsx    // Registration with email confirmation
+middleware.ts                     // Next.js 15 middleware integration
+
+// Database types (COMPLETE):
+src/types/database.ts             // Full PostgreSQL schema definitions
+```
+
+#### **Database Status - OPERATIONAL:**
+```sql
+-- Live Database: fgnosstvcukgdzztsnni.supabase.co
+✅ profiles table          - User accounts & subscription management
+✅ crisis_scenarios table  - Ready for 44,928 unique combinations
+✅ user_responses table    - AI assessment & progress tracking
+✅ RLS policies active     - Complete user data isolation
+✅ Triggers operational    - Automatic profile creation on signup
+
+-- Verification confirmed:
+tablename         rls_enabled
+crisis_scenarios  true
+profiles          true  
+user_responses    true
+```
+
+### 🎯 **PHASE 2 PRIORITY: Core Business Logic** 
+
+#### **HIGH PRIORITY IMPLEMENTATION NEEDED:**
+
+**1. Crisis Generation Engine** 🔥 **CRITICAL**
+```typescript
+src/lib/crisis-engine.ts - NEEDS IMPLEMENTATION
+```
+**Algorithm Requirements:**
+- Template-based generation with 5 variable dimensions
+- Industry(4) × CompanySize(3) × Severity(3) × Timeline(3) × Stakeholders(4) = 432 combinations
+- 13 categories × 8 templates × 432 variables = 44,928 unique scenarios
+- Daily selection algorithm preventing duplicates
+- User history tracking for personalized difficulty progression
+
+**2. AI Assessment System** 🔥 **CRITICAL**
+```typescript
+src/lib/groq-client.ts      - NEEDS IMPLEMENTATION  
+src/lib/scoring-system.ts   - NEEDS IMPLEMENTATION
+```
+**Technical Specification:**
+- **Primary AI**: Groq Llama-3.1-70b-Versatile ($0.59/1M tokens, 50-100 tok/sec)
+- **Fallback**: Claude-3.5-Sonnet for complex assessments
+- **Hybrid Scoring**: 40% template matching + 60% AI semantic analysis
+- **4 Dimensions**: Strategy(25%) + Communication(25%) + Leadership(25%) + Execution(25%)
+- **Output**: Detailed feedback with specific improvement recommendations
+
+**3. Database Operations** 🟡 **MEDIUM PRIORITY**
+```typescript
+src/lib/supabase-queries.ts - NEEDS IMPLEMENTATION
+```
+**Required Functions:**
+- User profile management and progress tracking
+- Crisis scenario retrieval with personalization
+- Response submission with AI assessment integration
+- Subscription and usage monitoring
+
+## 🔧 Development Commands
 
 ### Core Development
 ```bash
-# Project setup
-npm install                    # Install dependencies
-npm run dev                   # Start development server
-npm run build                 # Build for production
-npm run lint                  # Run linting
-
-# Testing
-npm run test                  # Run all tests
-npm run test:unit            # Unit tests only
-npm run test:e2e             # End-to-end tests
-npm run test:supabase        # Supabase local testing
-
-# Supabase
-npx supabase start           # Start local Supabase stack
-npx supabase stop            # Stop local Supabase
-npx supabase db reset        # Reset local database
-npx supabase login           # Authenticate with Supabase
-npx supabase db push         # Push schema changes
+npm run dev              # Start development server (TESTED ✅)
+npm run build            # Build for production (TESTED ✅)
+npm run start            # Production server (READY ✅)
+npm run lint             # ESLint validation (ACTIVE ✅)
 ```
 
-### AI Integration Testing
+### Database Operations
 ```bash
-# Test AI assessment pipeline
-npm run test:ai              # Test Groq API integration
-npm run test:scenarios       # Test scenario generation
-npm run benchmark:ai         # Performance benchmarks for AI responses
-npm run test:supabase:ai     # Test Supabase Edge Functions with AI
+# Database management (PRODUCTION-SAFE):
+# Use database/README.md for complete guidelines
+
+# SAFE operations (recommended):
+# Run in Supabase SQL Editor:
+1. database/1-diagnose.sql      # Check current state
+2. database/2-deploy-SAFE.sql   # Safe deployment (preserves data)
+3. database/3-verify.sql        # Verify deployment success
+
+# NEVER run in production:
+database/2-deploy-DANGEROUS.sql     # Contains DROP TABLE commands
+database/4-maintenance-DANGEROUS.sql # Contains mass DELETE operations
 ```
 
-## Code Architecture
+### Environment Configuration
+```bash
+# Development Environment (ACTIVE):
+NEXT_PUBLIC_SUPABASE_URL=https://fgnosstvcukgdzztsnni.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[configured]
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+DEBUG=true
 
-### File Structure
+# Future requirements for Phase 2:
+GROQ_API_KEY=[needed for AI assessment]
+
+# Phase 3 requirements:
+STRIPE_SECRET_KEY=[needed for payments]
+SENDGRID_API_KEY=[needed for email notifications]
+```
+
+## 📁 File Structure & Priorities
+
+### **🔥 TIER 1: Core Business Logic (80% development time)**
+```
+src/lib/
+├── crisis-engine.ts     ⚠️ NEEDS IMPLEMENTATION - Core value prop
+├── scoring-system.ts    ⚠️ NEEDS IMPLEMENTATION - AI assessment  
+├── groq-client.ts       ⚠️ NEEDS IMPLEMENTATION - AI integration
+└── supabase-queries.ts  ⚠️ NEEDS IMPLEMENTATION - Database ops
+```
+
+### **✅ TIER 2: Foundation Complete (0% time needed)**
 ```
 src/
-├── app/                    # Next.js 15 App Router
-│   ├── (auth)/            # Auth pages (login, signup)
-│   ├── dashboard/         # Main user dashboard
-│   ├── crisis/           # Crisis scenario pages
-│   └── api/              # API routes
-├── components/           # Reusable React components
-│   ├── ui/              # Base UI components (shadcn/ui)
-│   ├── crisis/          # Crisis-specific components
-│   └── auth/            # Authentication components
-├── lib/                 # Core utilities and configurations
-│   ├── supabase.ts     # Supabase configuration
-│   ├── groq.ts         # Groq AI client
-│   ├── stripe.ts       # Payment processing
-│   └── utils.ts        # General utilities
-└── types/              # TypeScript type definitions
+├── types/database.ts           ✅ Complete TypeScript definitions
+├── lib/supabase/
+│   ├── client.ts              ✅ Client-side integration
+│   ├── server.ts              ✅ Server-side operations
+│   └── middleware.ts          ✅ Session management
+├── app/(auth)/
+│   ├── login/page.tsx         ✅ Professional login form
+│   └── signup/page.tsx        ✅ Registration with confirmation
+└── middleware.ts              ✅ Route protection active
 ```
 
-### Key Architectural Patterns
+### **🟡 TIER 3: User Interface (10% development time)**
+```
+src/components/
+├── crisis/
+│   ├── CrisisCard.tsx         ⚠️ NEEDS IMPLEMENTATION
+│   └── ResponseForm.tsx       ⚠️ NEEDS IMPLEMENTATION
+└── dashboard/
+    └── ProgressTracker.tsx    ⚠️ NEEDS IMPLEMENTATION
+```
 
-1. **Scenario Generation System**: Template-based with 5 variable dimensions creating 44,928 unique combinations
-2. **AI Assessment Pipeline**: Hybrid scoring (template keywords + AI semantic analysis)
-3. **Subscription Management**: Freemium model with Stripe integration
-4. **Real-time Progress**: Supabase real-time subscriptions for live updates
+### **📋 TIER 4: Configuration & Documentation (5% time)**
+```
+📁 database/                   ✅ Complete security framework
+📁 context7/                   ✅ Cached documentation system
+📁 .serena/memories/           ✅ Project status documentation
+```
 
-### Critical Integration Points
+## 🔐 Critical Security Requirements
 
-- **Groq API**: Primary AI assessment engine, handles 60% of scoring weight
-- **Supabase Edge Functions**: Serverless backend for AI processing and webhook handling
-- **Stripe Webhooks**: Payment event processing for subscription management
-- **Email Notifications**: SendGrid integration for daily crisis delivery
+### **Database Security - ENTERPRISE GRADE**
+```
+⚠️ NEVER run these files on production:
+- database/2-deploy-DANGEROUS.sql (contains DROP TABLE)  
+- database/4-maintenance-DANGEROUS.sql (contains DELETE ALL)
 
-## Development Phases
+✅ ALWAYS use these files for production:
+- database/2-deploy-SAFE.sql (preserves user data)
+- database/4-maintenance-SAFE.sql (read-only operations)
+```
 
-### Phase 1: MVP Core (Current Priority)
-- User authentication and profiles
-- Crisis scenario display and response submission
-- Basic template-based scoring
-- Supabase integration
+### **Row Level Security - ACTIVE**
+- **profiles**: Users can only access their own profile data
+- **crisis_scenarios**: Public read access, authenticated insert only
+- **user_responses**: Complete user isolation, own responses only
+- **Automatic triggers**: Profile creation on user signup working
 
-### Phase 2: AI Integration
-- Groq API integration for advanced assessment
-- Detailed feedback generation
-- Performance optimization
+### **Environment Separation Strategy**
+- **Development**: fgnosstvcukgdzztsnni.supabase.co (current)
+- **Staging**: [create separate project] (planned Phase 3)
+- **Production**: [create separate project] (planned Phase 3)
 
-### Phase 3: Production Launch
-- Stripe payment integration
-- Email notification system
-- Security hardening and monitoring
+## 🎯 Development Best Practices
 
-## Performance Requirements
+### **Time Allocation (From DEVELOPER_FOCUS.md)**
+- **80%**: Core business logic files (crisis-engine, scoring-system, AI integration)
+- **10%**: User interface components (crisis display, response forms)
+- **10%**: Configuration, optimization, and documentation
 
-- **Crisis Generation:** <2s response time
-- **AI Assessment:** <3s response time
-- **Page Load:** <2s (P95)
-- **Uptime:** 99.9% availability target
+### **Code Quality Standards**
+- **TypeScript**: Explicit typing, no `any` types (except for Next.js 15 route fixes)
+- **React**: Functional components with hooks only
+- **Validation**: Zod schemas for all external data
+- **Error Handling**: Comprehensive try/catch with user-friendly messages
+- **Testing**: 3-layer protocol (syntax → environment → end-to-end)
 
-## Security Considerations
+### **Git Workflow Standards**
+```bash
+# Professional commit workflow:
+git add -A
+git commit -m "type: description"    # Use conventional commits
+git push origin main
 
-- PostgreSQL Row Level Security (RLS) enforces user data isolation
-- Input validation using Zod schemas
-- Rate limiting on AI API calls via Supabase Edge Functions
-- GDPR compliance for user data
+# Commit types: feat, fix, docs, refactor, test, chore, perf, style
+# NEVER add AI attribution - maintain professional standards
+```
 
-## Testing Strategy
+## 📊 Performance Requirements
 
-- **Unit Tests:** Jest for utilities and business logic
-- **Integration Tests:** Supabase local development testing
-- **E2E Tests:** Playwright for complete user journeys
-- **AI Testing:** Validate assessment accuracy and consistency
-- **Database Tests:** SQL schema validation and RLS policy testing
+### **Business Logic Targets**
+- **Crisis generation**: <2 seconds response time
+- **AI assessment**: <3 seconds response time  
+- **Page load time**: <2 seconds (P95)
+- **Database queries**: <500ms average
+- **Uptime target**: 99.9% availability
 
-## Business Model Context
+### **AI Integration Costs**
+- **Groq Llama-3.1-70b**: $0.59/1M tokens (primary assessment)
+- **Claude-3.5-Sonnet**: Premium assessments for complex scenarios
+- **Cost Control**: Template scoring fallback if AI budget exceeded
+- **Token Optimization**: Context7 caching reduces documentation calls by 80-90%
 
-- **Free Tier:** 1 crisis/week, basic assessment
-- **Pro Tier:** $19/month - daily crises, full AI feedback
-- **Corporate Tier:** $99/user/month - team features, custom scenarios
+## 💡 Session Continuity & Documentation
 
-Understanding the subscription tiers is crucial for implementing feature gates and usage tracking throughout the application.
+### **Pre-Development Reading**
+1. **DEVELOPMENT_WORKFLOW.md** - Session resumption procedures
+2. **DEVELOPER_FOCUS.md** - 80/20 time allocation guide
+3. **database/README.md** - Complete security guidelines
+4. **.serena/memories/** - Project status and achievements
+
+### **Context7 Optimization Strategy**
+```
+context7/ - Cached documentation (80-90% API call reduction)
+├── nextjs-15.md        - Complete Next.js 15 guide
+├── supabase-nextjs.md  - Supabase integration patterns
+└── README.md           - Cache management instructions
+```
+
+### **Quality Assurance Protocol**
+**3-Layer Testing (MANDATORY):**
+1. **Layer 1**: Syntax and structure validation (Claude immediate)
+2. **Layer 2**: Environment integration testing (developer)  
+3. **Layer 3**: End-to-end user flow validation (collaborative)
+
+## 🎓 Key Architecture Decisions
+
+### **Technical Choices Made**
+- **Supabase over custom auth**: 80% development time savings
+- **Next.js 15 App Router**: Modern React patterns with performance optimization
+- **TypeScript first**: Runtime error prevention worth upfront investment
+- **Middleware session management**: Elegant authentication solution
+- **Groq primary AI**: Cost-effective expert assessment at scale
+
+### **Business Logic Foundation**
+- **44,928 scenario combinations**: Mathematical approach to infinite unique content
+- **4-dimensional AI scoring**: Professional assessment matching corporate standards  
+- **Freemium disruption model**: $19/month vs $500-2000 competitors
+- **Type-safe architecture**: Rapid feature development without runtime errors
+
+## 🚀 Next Development Session Priorities
+
+### **Immediate Tasks (Phase 2 Core Logic)**
+1. **Implement crisis-engine.ts** - Algorithmic scenario generation system
+2. **Build scoring-system.ts** - AI assessment with 4-dimensional scoring
+3. **Create groq-client.ts** - Groq API integration with fallback handling
+4. **Develop supabase-queries.ts** - Database operations for user progress
+
+### **Success Metrics for Phase 2**
+- **Crisis generation working**: Unique scenarios generated daily
+- **AI assessment functional**: Actionable feedback with professional quality
+- **User progress tracking**: Analytics dashboard with gamification
+- **Beta platform ready**: 5-10 test users can complete full workflow
+
+**Current Status**: Production-ready authentication and database infrastructure. Ready for core business logic implementation to deliver unique value proposition.
+
+**Next Session**: Focus 80% time on crisis-engine.ts and scoring-system.ts to build competitive differentiation through algorithmic content generation and AI-powered assessment.
