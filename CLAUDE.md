@@ -339,6 +339,29 @@ Use this template when user asks about understanding existing code:
 // 6. Interview Analysis: "What if two users generate scenarios simultaneously?"
 ```
 
+### **Documentation Standards**
+
+#### **Real-Time Dating Standard**
+**MANDATORY**: All diary entries and real-time documentation must use actual system date when writing, not estimated dates from roadmaps or environment variables.
+
+**How to Get Real Date:**
+```bash
+date    # Always use this command to get current system time
+```
+
+**Application:**
+- **PM Diary entries**: Use actual date when entry is written  
+- **Progress updates**: Reflect real completion dates, not planned dates
+- **Session documentation**: Mark with actual work date
+- **Commit messages**: Should align with actual development date
+
+**Format Standard:**
+```markdown
+## Entry #X: Description - August 10, 2025 ⏰ REALTIME
+```
+
+**Purpose**: Maintain accurate historical record of when work was actually completed vs. planned timelines.
+
 ### **Git Workflow Standards**
 ```bash
 # Professional commit workflow:
