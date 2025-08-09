@@ -4,7 +4,7 @@
 
 **Before working on CrisisPM Platform, Claude MUST:**
 1. **Read parent workflow**: `/home/tathienbao/swedish-practice/CLAUDE.md` for universal process requirements
-2. **Follow session recovery**: Read `DEVELOPMENT_WORKFLOW.md` to understand current project state  
+2. **Follow session recovery**: Read this CLAUDE.md file to understand current project state  
 3. **Use token optimization**: Check `context7/` cached documentation before Context7 API calls
 4. **Execute git submodule workflow**: Always commit submodule → push → update parent → push parent
 
@@ -45,9 +45,9 @@
 
 ### **Critical Files for Session Continuity**
 1. **STRATEGIC_DECISIONS.md** - Decision history and validation status
-2. **DEVELOPMENT_WORKFLOW.md** - Git workflow and session recovery
-3. **DEVELOPER_FOCUS.md** - 80/20 time allocation priorities
-4. **.serena/memories/** - Project status and achievements
+2. **DEVELOPER_FOCUS.md** - 80/20 time allocation priorities
+3. **.serena/memories/** - Project status and achievements
+4. **AI_ASSESSMENT_STRATEGY.md** - AI validation framework and requirements
 
 ---
 
@@ -595,10 +595,10 @@ date    # Always use this command to get current system time
 ## 💡 Session Continuity & Documentation
 
 ### **Pre-Development Reading**
-1. **DEVELOPMENT_WORKFLOW.md** - Session resumption procedures
-2. **DEVELOPER_FOCUS.md** - 80/20 time allocation guide
-3. **database/README.md** - Complete security guidelines
-4. **.serena/memories/** - Project status and achievements
+1. **DEVELOPER_FOCUS.md** - 80/20 time allocation guide
+2. **database/README.md** - Complete security guidelines
+3. **.serena/memories/** - Project status and achievements
+4. **AI_ASSESSMENT_STRATEGY.md** - AI validation framework and requirements
 
 ### **Context7 Optimization Strategy**
 ```
