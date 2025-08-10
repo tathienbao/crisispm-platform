@@ -44,10 +44,10 @@
 4. Create beta launch framework with user feedback system
 
 ### **Critical Files for Session Continuity**
-1. **STRATEGIC_DECISIONS.md** - Decision history and validation status
-2. **DEVELOPER_FOCUS.md** - 80/20 time allocation priorities
+1. **docs/STRATEGIC_DECISIONS.md** - Decision history and validation status
+2. **docs/DEVELOPER_FOCUS.md** - 80/20 time allocation priorities
 3. **.serena/memories/** - Project status and achievements
-4. **AI_ASSESSMENT_STRATEGY.md** - AI validation framework and requirements
+4. **docs/AI_ASSESSMENT_STRATEGY.md** - AI validation framework and requirements
 
 ---
 
@@ -624,10 +624,10 @@ date    # Always use this command to get current system time
 ## 💡 Session Continuity & Documentation
 
 ### **Pre-Development Reading**
-1. **DEVELOPER_FOCUS.md** - 80/20 time allocation guide
+1. **docs/DEVELOPER_FOCUS.md** - 80/20 time allocation guide
 2. **database/README.md** - Complete security guidelines
 3. **.serena/memories/** - Project status and achievements
-4. **AI_ASSESSMENT_STRATEGY.md** - AI validation framework and requirements
+4. **docs/AI_ASSESSMENT_STRATEGY.md** - AI validation framework and requirements
 
 ### **Context7 Optimization Strategy**
 ```
