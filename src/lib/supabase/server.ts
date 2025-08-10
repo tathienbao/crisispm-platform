@@ -34,7 +34,7 @@ export async function createClient() {
          * Handles session cookie updates during authentication state changes.
          * Includes error handling for Server Component context where cookie writing may fail.
          */
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
@@ -46,7 +46,7 @@ export async function createClient() {
              */
           }
         },
-      },
+      } as any,
     }
   )
 }
