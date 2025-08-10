@@ -426,7 +426,7 @@ Content Freshness: 123+ years of daily scenarios without repeats
 **Commit Message Standards:**
 - **Types**: feat, fix, docs, refactor, test, chore, perf, style
 - **Format**: `type: description` (present tense, lowercase, no period)
-- **Professional**: Never add AI attribution or co-author credits
+- **Professional**: NEVER add "Generated with Claude Code", "Co-Authored-By: Claude", or any AI attribution
 
 ### **Session Recovery Protocol**
 **For New Sessions or Context Loss:**
