@@ -14,10 +14,29 @@ import type { Database } from '@/types/database'
  * - Client-side data mutations
  */
 export function createClient() {
-  return createBrowserClient<Database>(
+  console.log('🔧 Creating Supabase client with config:', {
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    hasKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    keyPrefix: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 20)
+  })
+
+  const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
+
+  // Add auth state change listener for debugging
+  supabase.auth.onAuthStateChange((event, session) => {
+    console.log('🔐 Auth State Change:', {
+      event,
+      hasSession: !!session,
+      hasUser: !!session?.user,
+      userEmail: session?.user?.email,
+      timestamp: new Date().toISOString()
+    })
+  })
+
+  return supabase
 }
 
 /**

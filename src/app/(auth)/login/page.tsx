@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { EnvironmentDebug } from '@/components/debug/EnvironmentDebug'
 
 /**
  * LOGIN FORM COMPONENT (WITH SEARCH PARAMS)
@@ -26,31 +27,72 @@ function LoginForm() {
    * Redirects to intended destination after successful authentication.
    */
   async function handleLogin(e: React.FormEvent) {
+    console.log('🚀 LOGIN FUNCTION CALLED')
     e.preventDefault()
     setLoading(true)
     setError(null)
 
+    // DEBUG: Log environment and form data
+    console.log('🔧 Environment Check:', {
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasSupabaseKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      appUrl: process.env.NEXT_PUBLIC_APP_URL,
+      nodeEnv: process.env.NODE_ENV,
+      email: email.trim(),
+      hasPassword: !!password,
+      redirectTo
+    })
+
     try {
+      console.log('📡 Creating Supabase client...')
       const supabase = createClient()
+      console.log('✅ Supabase client created')
       
+      console.log('🔐 Attempting authentication...')
       const { data, error: authError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       })
 
+      console.log('📊 Auth Response:', {
+        hasData: !!data,
+        hasUser: !!data?.user,
+        hasSession: !!data?.session,
+        authError: authError ? {
+          message: authError.message,
+          status: authError.status,
+          details: authError
+        } : null
+      })
+
       if (authError) {
-        setError(authError.message)
+        console.error('❌ Authentication Error:', authError)
+        setError(`Authentication failed: ${authError.message}`)
         return
       }
 
-      // Successful authentication - redirect to intended page
-      router.push(redirectTo as any)
-      router.refresh()
+      if (data.user) {
+        console.log('🎉 Login successful! User:', {
+          id: data.user.id,
+          email: data.user.email,
+          confirmed: data.user.email_confirmed_at
+        })
+        console.log('🔄 Redirecting to:', redirectTo)
+        
+        // Successful authentication - redirect to intended page
+        router.push(redirectTo as any)
+        router.refresh()
+      } else {
+        console.error('❌ No user data received')
+        setError('Login failed: No user data received')
+      }
       
     } catch (error) {
-      setError('An unexpected error occurred. Please try again.')
-      console.error('Login error:', error)
+      console.error('💥 Unexpected Error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      setError(`An unexpected error occurred: ${errorMessage}`)
     } finally {
+      console.log('🏁 Login function completed')
       setLoading(false)
     }
   }
@@ -132,6 +174,10 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
+            onClick={(e) => {
+              console.log('🖱️ Login button clicked!')
+              // Don't prevent default here, let form submission handle it
+            }}
             className="w-full bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
           >
             {loading ? (
@@ -180,6 +226,9 @@ function LoginForm() {
           </div>
         </div>
       </div>
+
+      {/* DEBUG COMPONENT - Only visible in development */}
+      <EnvironmentDebug />
     </div>
   )
 }
