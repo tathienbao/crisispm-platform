@@ -44,7 +44,7 @@ export async function updateSession(request: NextRequest) {
          * COOKIE WRITING - Set cookies in both request and response
          * This dual setting ensures proper synchronization between browser and server
          */
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
           cookiesToSet.forEach(({ name, value, options }) => 
             request.cookies.set(name, value)
           )
@@ -59,7 +59,7 @@ export async function updateSession(request: NextRequest) {
             supabaseResponse.cookies.set(name, value, options)
           )
         },
-      },
+      } as any,
     }
   )
 
