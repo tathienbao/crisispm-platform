@@ -28,9 +28,29 @@ function LoginForm() {
    */
   async function handleLogin(e: React.FormEvent) {
     console.log('🚀 LOGIN FUNCTION CALLED')
+    
+    // CRITICAL: Prevent default form submission
     e.preventDefault()
+    console.log('✋ Form submission prevented')
+    
     setLoading(true)
     setError(null)
+    console.log('🔄 Loading state set to true')
+
+    // DEBUG: Validate form inputs
+    if (!email.trim()) {
+      console.error('❌ No email provided')
+      setError('Please enter your email address')
+      setLoading(false)
+      return
+    }
+    
+    if (!password) {
+      console.error('❌ No password provided')
+      setError('Please enter your password')
+      setLoading(false)
+      return
+    }
 
     // DEBUG: Log environment and form data
     console.log('🔧 Environment Check:', {
@@ -117,7 +137,13 @@ function LoginForm() {
 
       {/* LOGIN FORM */}
       <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form 
+          onSubmit={(e) => {
+            console.log('📝 Form onSubmit triggered')
+            handleLogin(e)
+          }}
+          className="space-y-6"
+        >
           {/* EMAIL INPUT */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">

@@ -1,5 +1,14 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
+
+/**
+ * VIEWPORT CONFIGURATION
+ * Responsive design settings for mobile and desktop devices.
+ */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 
 /**
  * METADATA CONFIGURATION
@@ -11,7 +20,6 @@ export const metadata: Metadata = {
   description: 'Master project management crisis scenarios with expert AI feedback. Daily practice for PM professionals.',
   keywords: ['project management', 'crisis management', 'AI training', 'PM skills', 'business scenarios'],
   authors: [{ name: 'CrisisPM Team' }],
-  viewport: 'width=device-width, initial-scale=1',
 }
 
 /**
