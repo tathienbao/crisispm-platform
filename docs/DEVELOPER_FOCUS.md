@@ -27,17 +27,17 @@
 - Zod validation schemas for all external data
 - Type safety across the entire application
 
-#### **3. AI Assessment System**
+#### **3. User Progress & Engagement System**
 ```
-📁 src/lib/scoring-system.ts
-📁 src/lib/groq-client.ts
+📁 src/lib/user-progress.ts
+📁 src/lib/gamification.ts
 ```
-**Business Impact**: Expert-level feedback that justifies $19-99/month pricing
-**Why Critical**: Transforms raw responses into actionable professional development
+**Business Impact**: User retention and engagement without assessment complexity
+**Why Critical**: Drives daily usage and subscription conversion through simple gamification
 **Key Responsibilities**:
-- Hybrid scoring: 40% template matching + 60% AI semantic analysis
-- Groq Llama-3.1-70b integration for advanced assessment
-- Multi-dimensional scoring: Strategy/Communication/Leadership/Execution
+- Scenario completion tracking and analytics
+- Daily streak counters and milestone badges
+- Category progression and difficulty advancement
 
 #### **4. Database Client & Queries**
 ```
@@ -73,15 +73,15 @@
 #### **6. Core User Interfaces**
 ```
 📁 src/components/crisis/CrisisCard.tsx
-📁 src/components/crisis/ResponseForm.tsx  
+📁 src/components/progress/ProgressDashboard.tsx
 📁 src/app/dashboard/page.tsx
 ```
 **Business Impact**: Direct user engagement and retention
 **Why Important**: User experience determines subscription renewals
 **Focus Areas**:
 - Crisis scenario presentation and clarity
-- Response submission with rich text support
-- Progress tracking and motivation
+- Progress visualization and gamification elements
+- Category filtering and difficulty selection
 
 ---
 
@@ -93,9 +93,9 @@
 - **Success Metric**: All TypeScript interfaces compile without errors
 
 ### **Tuesday-Thursday - Core Logic Days**
-- **Primary Focus**: `src/lib/crisis-engine.ts` and `src/lib/scoring-system.ts`
+- **Primary Focus**: `src/lib/crisis-engine.ts` and `src/lib/user-progress.ts`
 - **Goal**: Build and refine business logic algorithms  
-- **Success Metric**: Crisis generation and AI assessment work flawlessly
+- **Success Metric**: Crisis generation and user engagement systems work flawlessly
 
 ### **Friday - Integration Day**
 - **Primary Focus**: `src/lib/supabase.ts` and API testing
@@ -109,7 +109,7 @@
 ### **The 3 Non-Negotiable Files**
 1. **`crisis-engine.ts`** - If this breaks, we have no product
 2. **`database.ts`** - If this breaks, nothing works
-3. **`scoring-system.ts`** - If this breaks, we have no value
+3. **`user-progress.ts`** - If this breaks, we have no engagement
 
 ### **Time Allocation Guidelines**
 - **80%**: Core business logic files (Tier 1)
@@ -132,15 +132,15 @@ If you find yourself spending more than 20% of time on:
 Keep these files always open in separate editor tabs:
 1. `database.ts` - Reference for all data structures
 2. `crisis-engine.ts` - Core algorithm development
-3. `scoring-system.ts` - AI integration work
+3. `user-progress.ts` - Engagement system work
 4. `supabase.ts` - Database operations
 
 ### **Testing Priority**
 Test these files FIRST and MOST FREQUENTLY:
 - Crisis generation algorithm accuracy
 - Database query performance  
-- AI assessment consistency
-- Data validation edge cases
+- User progress tracking consistency
+- Gamification and streak calculations
 
 ### **Code Review Focus**
 When reviewing code, spend 90% of attention on:
@@ -154,9 +154,9 @@ When reviewing code, spend 90% of attention on:
 ## 📊 **Business Impact Reminder**
 
 **Remember**: These files directly impact our key metrics:
-- **User Retention**: Quality crisis scenarios and helpful feedback
-- **Revenue Growth**: Reliable premium features justify pricing
-- **Competitive Advantage**: Unique algorithms and AI integration
+- **User Retention**: Quality crisis scenarios and engaging progress tracking
+- **Revenue Growth**: Daily usage habits justify subscription pricing
+- **Competitive Advantage**: Unique algorithms and gamification systems
 - **Scalability**: Efficient data models and query performance
 
 **Focus on these files = Focus on business success** 🎯
