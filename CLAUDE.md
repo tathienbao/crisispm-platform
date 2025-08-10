@@ -38,10 +38,10 @@
 - Research completed on AI-first approach vs manual data collection
 
 **📋 IMMEDIATE PRIORITIES**
-1. Complete AI assessment validation study design (in progress)
-2. Update documentation to remove unsupported percentage claims
-3. Create controlled testing environment for validation
-4. Recruit PM experts for baseline study
+1. Complete budget-friendly AI validation study design (in progress)
+2. Create self-validation framework using public PM case studies  
+3. Design community validation strategy for PM forums
+4. Create beta launch framework with user feedback system
 
 ### **Critical Files for Session Continuity**
 1. **STRATEGIC_DECISIONS.md** - Decision history and validation status
@@ -214,31 +214,34 @@ database/README.md                // Safe deployment procedures
 - Cost projections - BASED ON ASSUMPTIONS ONLY
 - Assessment accuracy - NEVER MEASURED
 
-#### **Required Validation Framework (6-8 weeks)**
+#### **Budget-Friendly Validation Framework (3-4 weeks)**
 ```
-Phase 1: Expert Baseline (2-3 weeks)
-- Recruit 3-5 PM experts to assess 20 crisis scenarios
-- Document expert reasoning patterns and scoring criteria
-- Establish "ground truth" for validation
+Phase 1: Self-Validation with Public Cases (1-2 weeks)
+- Use free PM case studies from Harvard Business School, PMI, business schools
+- Compare AI assessments against published expert analyses
+- Leverage existing crisis post-mortems with known outcomes
+- Cost: $0 | Confidence: Medium-High
 
-Phase 2: AI Framework Testing (2-3 weeks)
-- Test Claude/GPT-4 assessment of same scenarios
-- Build templates based on AI patterns
-- Measure correlation: Expert vs AI vs Template
+Phase 2: Community-Based Validation (1-2 weeks)  
+- Post anonymized scenarios on PM forums (Reddit r/ProjectManagement, PMI)
+- Get volunteer feedback from practicing PMs
+- Cross-reference AI assessments with community consensus
+- Cost: $0 | Confidence: Medium
 
-Phase 3: User Validation (2-3 weeks)
-- Test with 20+ beta users across assessment types
-- Measure helpfulness, learning outcomes, willingness to pay
-- Determine quality threshold for $19/month value
+Phase 3: Beta Launch with User Feedback (Ongoing)
+- Launch with clear "Beta Assessment" labeling and disclaimers
+- Collect user satisfaction ratings on assessment quality
+- Iterate based on real user feedback and satisfaction data
+- Cost: $0 | Confidence: Real-world validated
 ```
 
-**Success Criteria (To Be Measured, Not Assumed):**
-- Template correlation >0.8 with expert assessments
-- User helpfulness rating >4.0/5.0
-- AI costs <$2/user/month at scale
-- Measurable user performance improvement
+**Success Criteria (Budget-Friendly Validation):**
+- AI assessments align with published case analyses (>80% similarity)
+- Community feedback shows assessments are "helpful" (>3.5/5.0)
+- User satisfaction with beta assessments (>70% positive feedback)
+- AI costs remain under $2/user/month at scale
 
-**⚠️ DO NOT IMPLEMENT AI ASSESSMENT WITHOUT COMPLETING VALIDATION STUDY**
+**✅ IMPLEMENT AI ASSESSMENT WITH BUDGET-FRIENDLY VALIDATION APPROACH**
 
 ---
 
@@ -443,15 +446,15 @@ Content Freshness: 123+ years of daily scenarios without repeats
 ## 🎯 Current Development Priorities
 
 ### **IMMEDIATE TASKS (Phase 2)**
-1. **Complete AI Assessment Validation Study Design** (in progress)
-   - Design expert baseline study methodology
-   - Create controlled testing environment
-   - Remove unsupported percentage claims from documentation
+1. **Complete Budget-Friendly Validation Study Design** (in progress)
+   - Finalize self-validation methodology using public case studies
+   - Design community engagement strategy for PM forums
+   - Create beta launch framework with user feedback collection
 
-2. **Expert Recruitment & Validation Framework**
-   - Recruit 3-5 PM experts for baseline study
-   - Implement measurement framework
-   - Establish scientific success criteria
+2. **Budget-Friendly Validation Implementation**
+   - Collect public PM case studies for self-validation
+   - Design community validation strategy for PM forums
+   - Create beta launch framework with user feedback system
 
 ### **BLOCKED UNTIL VALIDATION COMPLETE**
 - AI assessment system implementation
@@ -510,6 +513,32 @@ Content Freshness: 123+ years of daily scenarios without repeats
 - **Validation**: Zod schemas for all external data
 - **Error Handling**: Comprehensive try/catch with user-friendly messages
 - **Security**: Input validation, RLS policies, secure environment variables
+
+### **Tool Selection Guidelines**
+**Edit Tool Selection Based on Content Size:**
+- **Small edits (<20 lines)**: Use Serena MCP tools (`mcp__serena__replace_regex`, `mcp__serena__replace_symbol_body`)
+- **Large edits (≥20 lines)**: Use Claude native Edit/MultiEdit tools for better performance
+- **Reasoning**: Serena tools are optimized for precision editing, Claude tools for bulk operations
+
+**When to Use Each Tool:**
+```
+Serena (mcp__serena__*):
+✅ Variable/function name changes
+✅ Single line fixes and adjustments
+✅ Precise symbol replacement
+✅ Small configuration updates
+
+Claude Native (Edit/MultiEdit):
+✅ Large code block replacement
+✅ Multiple section updates
+✅ File restructuring
+✅ Adding new large functions/classes
+```
+
+**Reading Tool Selection (Token Optimization):**
+- **Priority**: Always use Serena MCP tools (`mcp__serena__read_file`, `mcp__serena__search_for_pattern`) to save tokens
+- **Fallback**: Use Claude native Read/Grep tools only when Serena tools are unavailable
+- **Reasoning**: Serena tools are more token-efficient for file operations and codebase analysis
 
 ### **Educational Code Explanation Standards**
 
@@ -651,11 +680,11 @@ context7/ - Cached documentation (80-90% API call reduction)
 
 ## 🚀 Next Development Session Priorities
 
-### **Immediate Tasks (Phase 2 Core Logic)**
-1. **Implement crisis-engine.ts** - Algorithmic scenario generation system
-2. **Build scoring-system.ts** - AI assessment with 4-dimensional scoring
-3. **Create groq-client.ts** - Groq API integration with fallback handling
-4. **Develop supabase-queries.ts** - Database operations for user progress
+### **Immediate Tasks (Phase 2 Implementation)**
+1. **Create self-validation framework** - Collect and analyze public PM case studies
+2. **Design community validation strategy** - Engage PM forums for assessment validation
+3. **Build beta launch framework** - User feedback collection and iteration system
+4. **Implement AI assessment system** - After validation framework is complete
 
 ### **Success Metrics for Phase 2**
 - **Crisis generation working**: Unique scenarios generated daily
@@ -663,6 +692,6 @@ context7/ - Cached documentation (80-90% API call reduction)
 - **User progress tracking**: Analytics dashboard with gamification
 - **Beta platform ready**: 5-10 test users can complete full workflow
 
-**Current Status**: Production-ready authentication and database platform with complete crisis generation engine. AI assessment system requires 6-8 week validation study before implementation. All foundation systems operational and documented for session continuity.
+**Current Status**: Production-ready authentication and database platform with complete crisis generation engine. AI assessment system ready for implementation using budget-friendly validation approach. All foundation systems operational and documented for session continuity.
 
-**Next Session Priority**: Focus on AI assessment validation study design and removing unsupported claims from documentation. Do not implement AI assessment system until scientific validation complete.
+**Next Session Priority**: Implement budget-friendly validation framework using public case studies and community validation. AI assessment system can proceed with validation methodology in parallel.
