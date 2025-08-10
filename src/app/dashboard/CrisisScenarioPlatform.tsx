@@ -142,32 +142,44 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white/80 backdrop-blur-xl border-b border-gray-200/20 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">CrisisPM Platform</h1>
-              <p className="text-gray-600 mt-1">
-                Welcome back, {userEmail} • {progressStats?.totalCompleted || 0} scenarios completed
-              </p>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center space-x-4 mb-4 lg:mb-0">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                  <span className="text-white font-bold">CM</span>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">CrisisPM</h1>
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <span>{userEmail}</span>
+                    <span>•</span>
+                    <span className="font-medium">{progressStats?.totalCompleted || 0} scenarios</span>
+                  </div>
+                </div>
+              </div>
+              
               {progressStats && progressStats.currentStreak > 0 && (
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-orange-600 font-medium">🔥 {progressStats.currentStreak} day streak!</span>
-                  {progressStats.currentStreak >= 7 && (
-                    <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
-                      {GamificationHelpers.getStreakBadge(progressStats.currentStreak)?.name}
-                    </span>
-                  )}
+                <div className="bg-gradient-to-r from-orange-50 to-red-50 px-4 py-2 rounded-full border border-orange-200">
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-600 font-semibold">🔥 {progressStats.currentStreak} day streak</span>
+                    {progressStats.currentStreak >= 7 && (
+                      <span className="px-2 py-1 bg-orange-500 text-white text-xs rounded-full font-medium">
+                        {GamificationHelpers.getStreakBadge(progressStats.currentStreak)?.name}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
             
-            <div className="flex items-center gap-4 mt-4 sm:mt-0">
+            <div className="flex items-center gap-4">
               {/* View Toggle */}
-              <div className="flex bg-gray-100 rounded-lg p-1">
+              <div className="flex bg-gray-100 rounded-xl p-1">
                 <button
                   onClick={() => setActiveView('scenario')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`px-6 py-2 text-sm font-semibold rounded-lg transition-all ${
                     activeView === 'scenario'
                       ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
@@ -177,7 +189,7 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
                 </button>
                 <button
                   onClick={() => setActiveView('progress')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`px-6 py-2 text-sm font-semibold rounded-lg transition-all ${
                     activeView === 'progress'
                       ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
@@ -191,9 +203,9 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
               <form action="/api/auth/logout" method="POST">
                 <button 
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
                 >
-                  Logout
+                  Sign out
                 </button>
               </form>
             </div>

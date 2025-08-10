@@ -70,38 +70,45 @@ export default function CrisisCard({
   const timelineIcon = TIMELINE_ICONS[scenario.timeline as keyof typeof TIMELINE_ICONS]
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100">
-        <div className="flex items-start justify-between mb-4">
+      <div className="p-8 border-b border-gray-100">
+        <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${categoryColor}`}>
+            <span className={`px-4 py-2 rounded-full text-sm font-semibold ${categoryColor}`}>
               {scenario.category.toUpperCase()}
             </span>
-            <span className={`px-2 py-1 rounded-md text-xs font-medium ring-1 ring-inset ${difficultyColor}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-medium ring-1 ring-inset ${difficultyColor}`}>
               {scenario.difficulty.toUpperCase()}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span className="flex items-center gap-1">
-              {severityIcon} {scenario.severity}
+          <div className="flex items-center gap-3 text-lg">
+            <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-sm">
+              {severityIcon} <span className="capitalize text-gray-700">{scenario.severity}</span>
             </span>
-            <span className="flex items-center gap-1">
-              {timelineIcon} {scenario.timeline}
+            <span className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-sm">
+              {timelineIcon} <span className="capitalize text-gray-700">{scenario.timeline}</span>
             </span>
           </div>
         </div>
 
-        <h2 className="text-xl font-bold text-gray-900 mb-3">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
           {scenario.title}
         </h2>
 
-        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-          <span className="capitalize">{scenario.industry} Industry</span>
-          <span>•</span>
-          <span className="capitalize">{scenario.company_size} Company</span>
-          <span>•</span>
-          <span className="capitalize">{scenario.stakeholder_type} Stakeholders</span>
+        <div className="flex items-center gap-6 text-sm text-gray-600">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <span className="capitalize font-medium">{scenario.industry} Industry</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+            <span className="capitalize font-medium">{scenario.company_size} Company</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span className="capitalize font-medium">{scenario.stakeholder_type} Stakeholders</span>
+          </div>
         </div>
       </div>
 
