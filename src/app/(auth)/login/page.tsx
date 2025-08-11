@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { EnvironmentDebug } from '@/components/debug/EnvironmentDebug'
+import { LogViewer } from '@/components/debug/LogViewer'
 
 /**
  * LOGIN FORM COMPONENT (WITH SEARCH PARAMS)
@@ -64,17 +65,30 @@ function LoginForm() {
     })
 
     try {
-      console.log('📡 Creating Supabase client...')
+      // PERSISTENT LOGGING - Store logs in localStorage for debugging
+      const logToStorage = (message: string, data?: any) => {
+        const logs = JSON.parse(localStorage.getItem('crisispm-debug-logs') || '[]')
+        logs.push({ 
+          timestamp: new Date().toISOString(), 
+          message, 
+          data: data ? JSON.stringify(data) : null,
+          url: window.location.href
+        })
+        localStorage.setItem('crisispm-debug-logs', JSON.stringify(logs.slice(-50))) // Keep last 50 logs
+        console.log(message, data)
+      }
+
+      logToStorage('📡 Creating Supabase client...')
       const supabase = createClient()
-      console.log('✅ Supabase client created')
+      logToStorage('✅ Supabase client created')
       
-      console.log('🔐 Attempting authentication...')
+      logToStorage('🔐 Attempting authentication...')
       const { data, error: authError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       })
 
-      console.log('📊 Auth Response:', {
+      const authResponse = {
         hasData: !!data,
         hasUser: !!data?.user,
         hasSession: !!data?.session,
@@ -83,14 +97,15 @@ function LoginForm() {
           status: authError.status,
           details: authError
         } : null
-      })
+      }
+      logToStorage('📊 Auth Response:', authResponse)
 
       if (authError) {
-        console.error('❌ Authentication Error:', authError)
+        logToStorage('❌ Authentication Error:', authError)
         
         // Check if it's a network error but user still got signed in
         if (authError.message.includes('Failed to fetch') || authError.message.includes('network')) {
-          console.log('🌐 Network error detected, checking if user is actually signed in...')
+          logToStorage('🌐 Network error detected, checking if user is actually signed in...')
           
           // Wait a moment for auth state to update
           await new Promise(resolve => setTimeout(resolve, 2000))
@@ -98,35 +113,46 @@ function LoginForm() {
           // Check current session
           const { data: sessionData } = await supabase.auth.getSession()
           if (sessionData.session?.user) {
-            console.log('✅ User is actually signed in despite network error!')
+            logToStorage('✅ User is actually signed in despite network error!')
             // Continue to redirect
           } else {
+            logToStorage('❌ Network error and no valid session')
             setError(`Network error: ${authError.message}. Please try again.`)
             return
           }
         } else {
+          logToStorage('❌ Authentication failed with non-network error')
           setError(`Authentication failed: ${authError.message}`)
+          return
+        }
+      } else {
+        // Check if this is a general network issue
+        if (authError.message.includes('Failed to fetch')) {
+          logToStorage('🌐 Network connectivity issue detected')
+          setError('Network connectivity issue. Please check your internet connection and try again.')
           return
         }
       }
 
       const finalUser = data.user || (await supabase.auth.getSession()).data.session?.user
       if (finalUser) {
-        console.log('🎉 Login successful! User:', {
+        const userInfo = {
           id: finalUser.id,
           email: finalUser.email,
           confirmed: finalUser.email_confirmed_at
-        })
-        console.log('🔄 Redirecting to:', redirectTo)
+        }
+        logToStorage('🎉 Login successful! User:', userInfo)
+        logToStorage('🔄 Redirecting to:', { redirectTo })
         
-        // Wait a moment for cookies to be set properly
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        console.log('⏰ Waited 1 second for cookie sync')
+        // Wait for cookies to be set properly
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        logToStorage('⏰ Waited 1.5 seconds for cookie sync')
         
-        // Successful authentication - redirect to intended page
-        window.location.href = redirectTo // Use window.location instead of router
+        // Use window.location.replace to avoid back button issues
+        logToStorage('🚀 About to redirect with window.location.replace')
+        window.location.replace(redirectTo)
       } else {
-        console.error('❌ No user data received')
+        logToStorage('❌ No user data received')
         setError('Login failed: No user data received')
       }
       
@@ -278,6 +304,9 @@ function LoginForm() {
 
       {/* DEBUG COMPONENT - Only visible in development */}
       <EnvironmentDebug />
+      
+      {/* LOG VIEWER - Floating debug console */}
+      <LogViewer />
     </div>
   )
 }

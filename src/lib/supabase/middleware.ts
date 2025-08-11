@@ -76,7 +76,18 @@ export async function updateSession(request: NextRequest) {
    */
   const {
     data: { user },
+    error
   } = await supabase.auth.getUser()
+  
+  // DEBUG: Log middleware authentication check
+  console.log('🔍 Middleware Auth Check:', {
+    path: request.nextUrl.pathname,
+    hasUser: !!user,
+    userEmail: user?.email,
+    error: error?.message,
+    cookieCount: request.cookies.getAll().length,
+    timestamp: new Date().toISOString()
+  })
 
   /**
    * ROUTE PROTECTION LOGIC
