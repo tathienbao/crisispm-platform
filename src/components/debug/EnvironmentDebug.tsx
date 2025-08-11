@@ -1,15 +1,24 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+
 /**
  * ENVIRONMENT DEBUG COMPONENT
  * Shows environment variables and configuration for debugging authentication issues.
  * Only visible in development mode for security.
  */
 export function EnvironmentDebug() {
+  const [isClient, setIsClient] = useState(false)
+  
   // Only show in development
   if (process.env.NODE_ENV === 'production') {
     return null
   }
+  
+  // Prevent hydration mismatch by only showing client-specific data after hydration
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const envVars = {
     'NEXT_PUBLIC_SUPABASE_URL': process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -32,10 +41,12 @@ export function EnvironmentDebug() {
           </div>
         ))}
       </div>
-      <div className="mt-2 pt-2 border-t border-gray-600 text-gray-400">
-        <div>Window location: {typeof window !== 'undefined' ? window.location.origin : 'SSR'}</div>
-        <div>Timestamp: {new Date().toLocaleTimeString()}</div>
-      </div>
+      {isClient && (
+        <div className="mt-2 pt-2 border-t border-gray-600 text-gray-400">
+          <div>Window location: {window.location.origin}</div>
+          <div>Timestamp: {new Date().toLocaleTimeString()}</div>
+        </div>
+      )}
     </div>
   )
 }
