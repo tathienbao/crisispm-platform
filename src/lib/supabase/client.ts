@@ -22,15 +22,11 @@ export function createClient() {
 
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: true,      // 🔑 KEY FIX: Persist session in cookies
-        autoRefreshToken: true,    // Auto refresh expired tokens  
-        detectSessionInUrl: true   // Handle auth callbacks
-      }
-    }
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
+  
+  // Note: @supabase/ssr automatically handles session persistence via cookies
+  // The persistSession, autoRefreshToken, and detectSessionInUrl are enabled by default
 
   // Add auth state change listener for debugging
   supabase.auth.onAuthStateChange((event, session) => {
