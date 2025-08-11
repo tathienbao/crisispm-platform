@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { EnvironmentDebug } from '@/components/debug/EnvironmentDebug'
@@ -13,7 +13,6 @@ import { LogViewer } from '@/components/debug/LogViewer'
  * Includes form validation, error handling, and post-auth redirection.
  */
 function LoginForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/dashboard'
   
@@ -123,13 +122,6 @@ function LoginForm() {
         } else {
           logToStorage('❌ Authentication failed with non-network error')
           setError(`Authentication failed: ${authError.message}`)
-          return
-        }
-      } else {
-        // Check if this is a general network issue
-        if (authError.message.includes('Failed to fetch')) {
-          logToStorage('🌐 Network connectivity issue detected')
-          setError('Network connectivity issue. Please check your internet connection and try again.')
           return
         }
       }
@@ -249,7 +241,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            onClick={(e) => {
+            onClick={() => {
               console.log('🖱️ Login button clicked!')
               // Don't prevent default here, let form submission handle it
             }}
