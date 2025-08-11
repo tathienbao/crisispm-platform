@@ -22,7 +22,14 @@ export function createClient() {
 
   const supabase = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: true,      // 🔑 KEY FIX: Persist session in cookies
+        autoRefreshToken: true,    // Auto refresh expired tokens  
+        detectSessionInUrl: true   // Handle auth callbacks
+      }
+    }
   )
 
   // Add auth state change listener for debugging

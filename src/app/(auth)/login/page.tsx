@@ -141,6 +141,11 @@ function LoginForm() {
         await new Promise(resolve => setTimeout(resolve, 2000))
         logToStorage('⏰ Waited 2 seconds for cookie sync')
         
+        // Check if authentication cookies exist
+        const cookies = document.cookie.split(';').map(c => c.trim().split('=')[0])
+        const authCookies = cookies.filter(name => name.includes('sb-') || name.includes('supabase'))
+        logToStorage('🍪 Auth cookies present:', { authCookies, totalCookies: cookies.length })
+        
         // Try router refresh first, then redirect
         logToStorage('🔄 Refreshing router cache first')
         router.refresh()
