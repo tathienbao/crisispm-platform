@@ -313,7 +313,11 @@ export class UserProgressManager {
         streakUpdatedAt
       }
     } catch (error) {
-      console.error('Error calculating progress stats:', error)
+      console.error('Error calculating progress stats:', {
+        error: error instanceof Error ? error.message : error,
+        userId,
+        stack: error instanceof Error ? error.stack : undefined
+      })
       return this.getDefaultProgressStats()
     }
   }
@@ -332,8 +336,10 @@ export class UserProgressManager {
     const completionsByDate = new Map<string, number>()
     
     completions.forEach(completion => {
-      const date = completion.submitted_at.split('T')[0] // Get just the date part
-      completionsByDate.set(date, (completionsByDate.get(date) || 0) + 1)
+      if (completion.submitted_at) {
+        const date = completion.submitted_at.split('T')[0] // Get just the date part
+        completionsByDate.set(date, (completionsByDate.get(date) || 0) + 1)
+      }
     })
 
     const uniqueDates = Array.from(completionsByDate.keys()).sort().reverse() // Most recent first

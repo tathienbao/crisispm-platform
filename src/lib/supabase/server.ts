@@ -15,62 +15,24 @@ import type { Database } from '@/types/database'
  */
 export async function createClient() {
   const cookieStore = await cookies()
-  
-  // DEBUG: Log all cookies to see what's available
-  const allCookies = cookieStore.getAll()
-  const supabaseCookies = allCookies.filter(cookie => 
-    cookie.name.includes('supabase') || 
-    cookie.name.includes('sb-') ||
-    cookie.name.includes('auth-token') ||
-    cookie.name.includes('access_token') ||
-    cookie.name.includes('refresh_token')
-  )
-  
-  console.log('🍪 Server: All cookies count:', allCookies.length)
-  console.log('🍪 Server: Supabase-related cookies:', supabaseCookies.map(c => ({
-    name: c.name,
-    hasValue: !!c.value,
-    valueLength: c.value.length,
-    valuePreview: c.value.substring(0, 50) + '...' // Show first 50 chars for debugging
-  })))
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        /**
-         * COOKIE READING CONFIGURATION
-         * Retrieves all cookies from Next.js cookie store for authentication state management.
-         */
         getAll() {
           return cookieStore.getAll()
         },
-        
-        /**
-         * COOKIE WRITING CONFIGURATION  
-         * Handles session cookie updates during authentication state changes.
-         * Includes error handling for Server Component context where cookie writing may fail.
-         */
-        setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
+        setAll(cookiesToSet: any) {
           try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              // Ensure cookies work in production HTTPS
-              const cookieOptions = {
-                ...options,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax',
-                httpOnly: false, // Allow JavaScript access
-                path: '/'
-              }
-              cookieStore.set(name, value, cookieOptions)
-            })
-          } catch (error) {
-            /**
-             * EXPECTED BEHAVIOR: Cookie setting may fail in Server Components
-             * This is normal when called from RSC context - middleware handles session refresh
-             */
-            console.log('Cookie setting failed (expected in RSC):', error)
+            cookiesToSet.forEach(({ name, value, options }: any) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
           }
         },
       } as any,
