@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { EnvironmentDebug } from '@/components/debug/EnvironmentDebug'
@@ -13,6 +13,7 @@ import { LogViewer } from '@/components/debug/LogViewer'
  * Includes form validation, error handling, and post-auth redirection.
  */
 function LoginForm() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/dashboard'
   
@@ -136,13 +137,18 @@ function LoginForm() {
         logToStorage('🎉 Login successful! User:', userInfo)
         logToStorage('🔄 Redirecting to:', { redirectTo })
         
-        // Wait for cookies to be set properly
-        await new Promise(resolve => setTimeout(resolve, 1500))
-        logToStorage('⏰ Waited 1.5 seconds for cookie sync')
+        // Wait for cookies to be fully synchronized
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        logToStorage('⏰ Waited 2 seconds for cookie sync')
         
-        // Use window.location.replace to avoid back button issues
-        logToStorage('🚀 About to redirect with window.location.replace')
-        window.location.replace(redirectTo)
+        // Try router refresh first, then redirect
+        logToStorage('🔄 Refreshing router cache first')
+        router.refresh()
+        
+        // Additional wait after refresh
+        await new Promise(resolve => setTimeout(resolve, 500))
+        logToStorage('🚀 About to redirect with window.location.href (after router refresh)')
+        window.location.href = redirectTo
       } else {
         logToStorage('❌ No user data received')
         setError('Login failed: No user data received')
