@@ -21,8 +21,20 @@ export async function POST() {
       )
     }
 
-    // SUCCESSFUL LOGOUT - REDIRECT TO HOME
-    return NextResponse.redirect(new URL('/', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'))
+    // SUCCESSFUL LOGOUT - RETURN SUCCESS RESPONSE
+    const response = NextResponse.json({ success: true })
+    
+    // Clear authentication cookies
+    response.cookies.set('sb-access-token', '', { 
+      expires: new Date(0),
+      path: '/'
+    })
+    response.cookies.set('sb-refresh-token', '', { 
+      expires: new Date(0),
+      path: '/'
+    })
+    
+    return response
     
   } catch (error) {
     console.error('Logout error:', error)

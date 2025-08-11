@@ -87,15 +87,35 @@ function LoginForm() {
 
       if (authError) {
         console.error('❌ Authentication Error:', authError)
-        setError(`Authentication failed: ${authError.message}`)
-        return
+        
+        // Check if it's a network error but user still got signed in
+        if (authError.message.includes('Failed to fetch') || authError.message.includes('network')) {
+          console.log('🌐 Network error detected, checking if user is actually signed in...')
+          
+          // Wait a moment for auth state to update
+          await new Promise(resolve => setTimeout(resolve, 2000))
+          
+          // Check current session
+          const { data: sessionData } = await supabase.auth.getSession()
+          if (sessionData.session?.user) {
+            console.log('✅ User is actually signed in despite network error!')
+            // Continue to redirect
+          } else {
+            setError(`Network error: ${authError.message}. Please try again.`)
+            return
+          }
+        } else {
+          setError(`Authentication failed: ${authError.message}`)
+          return
+        }
       }
 
-      if (data.user) {
+      const finalUser = data.user || (await supabase.auth.getSession()).data.session?.user
+      if (finalUser) {
         console.log('🎉 Login successful! User:', {
-          id: data.user.id,
-          email: data.user.email,
-          confirmed: data.user.email_confirmed_at
+          id: finalUser.id,
+          email: finalUser.email,
+          confirmed: finalUser.email_confirmed_at
         })
         console.log('🔄 Redirecting to:', redirectTo)
         

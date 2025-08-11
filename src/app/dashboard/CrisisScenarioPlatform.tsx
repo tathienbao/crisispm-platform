@@ -45,6 +45,28 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
     }
   }
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (response.ok) {
+        // Redirect to home page after successful logout
+        window.location.href = '/'
+      } else {
+        console.error('Logout failed')
+        alert('Failed to logout. Please try again.')
+      }
+    } catch (error) {
+      console.error('Logout error:', error)
+      alert('An error occurred during logout. Please try again.')
+    }
+  }
+
   const generateNewScenario = (stats?: ProgressStats) => {
     try {
       const currentStats = stats || progressStats
@@ -200,14 +222,12 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
               </div>
 
               {/* Logout Button */}
-              <form action="/api/auth/logout" method="POST">
-                <button 
-                  type="submit"
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
-                >
-                  Sign out
-                </button>
-              </form>
+              <button 
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                Sign out
+              </button>
             </div>
           </div>
         </div>
