@@ -30,7 +30,8 @@ export async function createClient() {
   console.log('🍪 Server: Supabase-related cookies:', supabaseCookies.map(c => ({
     name: c.name,
     hasValue: !!c.value,
-    valueLength: c.value.length
+    valueLength: c.value.length,
+    valuePreview: c.value.substring(0, 50) + '...' // Show first 50 chars for debugging
   })))
 
   return createServerClient<Database>(

@@ -49,10 +49,10 @@ export async function updateSession(request: NextRequest) {
             // Set cookie in request for current processing
             request.cookies.set(name, value)
             
-            // Set cookie in response with proper production settings
+            // Set cookie in response with environment-appropriate settings
             const cookieOptions = {
               ...options,
-              secure: true, // Always secure in middleware (production)
+              secure: process.env.NODE_ENV === 'production', // 🔑 KEY FIX: Only secure in production
               sameSite: 'lax' as const,
               httpOnly: false,
               path: '/'

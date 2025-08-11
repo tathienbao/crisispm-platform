@@ -14,7 +14,21 @@ export default async function DashboardPage() {
   // DEBUG: Add server-side debugging
   console.log('🔍 Dashboard: Checking server-side authentication...')
   
-  // GET AUTHENTICATED USER
+  // GET AUTHENTICATED USER AND SESSION
+  console.log('🔍 Dashboard: Trying getSession() first...')
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+  console.log('🔍 Dashboard: Session result:', {
+    hasSession: !!session,
+    hasUser: !!session?.user,
+    userEmail: session?.user?.email,
+    sessionError: sessionError ? {
+      message: sessionError.message,
+      status: sessionError.status
+    } : null
+  })
+
+  // Try getUser() as backup
+  console.log('🔍 Dashboard: Trying getUser()...')
   const { data: { user }, error } = await supabase.auth.getUser()
   
   console.log('🔍 Dashboard: Server auth result:', {
@@ -27,9 +41,17 @@ export default async function DashboardPage() {
     timestamp: new Date().toISOString()
   })
   
+  // Use session user if available, fallback to getUser() result
+  const finalUser = session?.user || user
+
   // REDIRECT IF NO VALID SESSION (backup protection)
-  if (error || !user) {
-    console.log('❌ Dashboard: No valid session, redirecting to login')
+  if ((error || !user) && (sessionError || !session)) {
+    console.log('❌ Dashboard: No valid session from either method, redirecting to login')
+    redirect('/login')
+  }
+  
+  if (!finalUser) {
+    console.log('❌ Dashboard: No final user found, redirecting to login')
     redirect('/login')
   }
   
@@ -44,7 +66,7 @@ export default async function DashboardPage() {
         </div>
       </div>
     }>
-      <CrisisScenarioPlatform userId={user.id} userEmail={user.email || ''} />
+      <CrisisScenarioPlatform userId={finalUser.id} userEmail={finalUser.email || ''} />
     </Suspense>
   )
 }
