@@ -45,19 +45,25 @@ export async function updateSession(request: NextRequest) {
          * This dual setting ensures proper synchronization between browser and server
          */
         setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
-          cookiesToSet.forEach(({ name, value, options }) => 
+          cookiesToSet.forEach(({ name, value, options }) => {
+            // Set cookie in request for current processing
             request.cookies.set(name, value)
-          )
+            
+            // Set cookie in response with proper production settings
+            const cookieOptions = {
+              ...options,
+              secure: true, // Always secure in middleware (production)
+              sameSite: 'lax' as const,
+              httpOnly: false,
+              path: '/'
+            }
+            supabaseResponse.cookies.set(name, value, cookieOptions)
+          })
           
           // Create new response with updated request cookies
           supabaseResponse = NextResponse.next({
             request,
           })
-          
-          // Apply cookies to the response that will be sent to browser
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
         },
       } as any,
     }

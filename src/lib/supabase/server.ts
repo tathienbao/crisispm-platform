@@ -36,14 +36,23 @@ export async function createClient() {
          */
         setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
           try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
+            cookiesToSet.forEach(({ name, value, options }) => {
+              // Ensure cookies work in production HTTPS
+              const cookieOptions = {
+                ...options,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax',
+                httpOnly: false, // Allow JavaScript access
+                path: '/'
+              }
+              cookieStore.set(name, value, cookieOptions)
+            })
           } catch (error) {
             /**
              * EXPECTED BEHAVIOR: Cookie setting may fail in Server Components
              * This is normal when called from RSC context - middleware handles session refresh
              */
+            console.log('Cookie setting failed (expected in RSC):', error)
           }
         },
       } as any,
