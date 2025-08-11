@@ -99,9 +99,12 @@ function LoginForm() {
         })
         console.log('🔄 Redirecting to:', redirectTo)
         
+        // Wait a moment for cookies to be set properly
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        console.log('⏰ Waited 1 second for cookie sync')
+        
         // Successful authentication - redirect to intended page
-        router.push(redirectTo as any)
-        router.refresh()
+        window.location.href = redirectTo // Use window.location instead of router
       } else {
         console.error('❌ No user data received')
         setError('Login failed: No user data received')

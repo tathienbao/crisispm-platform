@@ -15,6 +15,23 @@ import type { Database } from '@/types/database'
  */
 export async function createClient() {
   const cookieStore = await cookies()
+  
+  // DEBUG: Log all cookies to see what's available
+  const allCookies = cookieStore.getAll()
+  const supabaseCookies = allCookies.filter(cookie => 
+    cookie.name.includes('supabase') || 
+    cookie.name.includes('sb-') ||
+    cookie.name.includes('auth-token') ||
+    cookie.name.includes('access_token') ||
+    cookie.name.includes('refresh_token')
+  )
+  
+  console.log('🍪 Server: All cookies count:', allCookies.length)
+  console.log('🍪 Server: Supabase-related cookies:', supabaseCookies.map(c => ({
+    name: c.name,
+    hasValue: !!c.value,
+    valueLength: c.value.length
+  })))
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

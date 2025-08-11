@@ -11,13 +11,29 @@ import CrisisScenarioPlatform from './CrisisScenarioPlatform'
 export default async function DashboardPage() {
   const supabase = await createClient()
   
+  // DEBUG: Add server-side debugging
+  console.log('🔍 Dashboard: Checking server-side authentication...')
+  
   // GET AUTHENTICATED USER
   const { data: { user }, error } = await supabase.auth.getUser()
   
+  console.log('🔍 Dashboard: Server auth result:', {
+    hasUser: !!user,
+    userEmail: user?.email,
+    error: error ? {
+      message: error.message,
+      status: error.status
+    } : null,
+    timestamp: new Date().toISOString()
+  })
+  
   // REDIRECT IF NO VALID SESSION (backup protection)
   if (error || !user) {
+    console.log('❌ Dashboard: No valid session, redirecting to login')
     redirect('/login')
   }
+  
+  console.log('✅ Dashboard: Valid session found, rendering dashboard')
 
   return (
     <Suspense fallback={
