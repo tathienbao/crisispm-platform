@@ -9,6 +9,7 @@
  */
 
 import type { CrisisScenario, CrisisScenarioInsert } from '../types/database'
+import { AIClientCrisisGenerator } from './ai-crisis-client'
 
 // Template structure type
 interface CrisisTemplate {
@@ -277,7 +278,65 @@ export const CRISIS_TEMPLATES = {
  */
 export class CrisisGenerator {
   /**
+   * Generate a unique crisis scenario with AI-powered content
+   * NEW: Uses AI instead of static templates for dynamic content generation
+   */
+  static async generateAIScenario(params: {
+    category?: keyof typeof CRISIS_TEMPLATES
+    difficulty?: 'beginner' | 'intermediate' | 'advanced'
+    industry?: typeof CRISIS_VARIABLES.industry[number]
+    company_size?: typeof CRISIS_VARIABLES.company_size[number]
+    used_scenarios?: string[] // Previously generated scenario IDs to avoid duplicates
+  } = {}): Promise<CrisisScenarioInsert> {
+    
+    // Select category (random if not specified)
+    const category = params.category || this.getRandomElement(CRISIS_CATEGORIES)
+    
+    // Generate variable combination (maintains algorithmic uniqueness)
+    const variables = this.generateVariableCombination(params)
+    const difficulty = params.difficulty || 'intermediate'
+    
+    // Create scenario ID for duplicate prevention (no template ID needed for AI)
+    const scenarioId = this.generateAIScenarioId(category, variables, difficulty)
+    
+    // Check if already used
+    if (params.used_scenarios?.includes(scenarioId)) {
+      // Recursively try again with different variables
+      return this.generateAIScenario({
+        ...params,
+        used_scenarios: [...(params.used_scenarios || []), scenarioId]
+      })
+    }
+    
+    // Generate content using AI (client-side API call)
+    const aiContent = await AIClientCrisisGenerator.generateScenarioContent({
+      category,
+      variables,
+      difficulty
+    })
+    
+    return {
+      category,
+      difficulty,
+      template_id: `AI_${category.toUpperCase()}_${Date.now()}`, // AI-generated template ID
+      industry: variables.industry,
+      company_size: variables.company_size,
+      severity: variables.severity,
+      timeline: variables.timeline,
+      stakeholder_type: variables.stakeholder_type,
+      title: aiContent.title,
+      description: aiContent.description,
+      context: aiContent.context,
+      stakeholders: aiContent.stakeholders,
+      time_pressure: aiContent.time_pressure,
+      expert_solution: aiContent.expert_solution,
+      assessment_criteria: aiContent.assessment_criteria
+    }
+  }
+
+  /**
    * Generate a unique crisis scenario based on user preferences and history
+   * LEGACY: Template-based generation (kept for fallback/testing)
    */
   static generateScenario(params: {
     category?: keyof typeof CRISIS_TEMPLATES
@@ -332,7 +391,37 @@ export class CrisisGenerator {
   }
 
   /**
+   * Generate AI-powered daily scenario for user based on their progress and preferences
+   * NEW: Uses AI generation for personalized, dynamic content
+   */
+  static async generateAIDailyScenario(userProfile: {
+    difficulty: 'beginner' | 'intermediate' | 'advanced'
+    categories: string[]
+    total_crises: number
+    average_score: number
+    used_scenarios: string[]
+  }): Promise<CrisisScenarioInsert> {
+    
+    // Adapt difficulty based on performance
+    const adjustedDifficulty = this.adaptDifficulty(userProfile)
+    
+    // Select category based on user preferences and learning needs
+    const preferredCategories = userProfile.categories.length > 0 
+      ? userProfile.categories 
+      : CRISIS_CATEGORIES
+    
+    const category = this.getRandomElement(preferredCategories) as keyof typeof CRISIS_TEMPLATES
+    
+    return this.generateAIScenario({
+      category,
+      difficulty: adjustedDifficulty,
+      used_scenarios: userProfile.used_scenarios
+    })
+  }
+
+  /**
    * Generate daily scenario for user based on their progress and preferences
+   * LEGACY: Template-based generation (kept for fallback)
    */
   static generateDailyScenario(userProfile: {
     difficulty: 'beginner' | 'intermediate' | 'advanced'
@@ -382,6 +471,12 @@ export class CrisisGenerator {
     // Create unique ID based on category + template + variable combination
     const variableHash = `${variables.industry}-${variables.company_size}-${variables.severity}-${variables.timeline}-${variables.stakeholder_type}`
     return `${category}_${templateId}_${variableHash}`
+  }
+
+  private static generateAIScenarioId(category: string, variables: any, difficulty: string): string {
+    // Create unique ID based on category + variables + difficulty (no template needed for AI)
+    const variableHash = `${variables.industry}-${variables.company_size}-${variables.severity}-${variables.timeline}-${variables.stakeholder_type}`
+    return `AI_${category}_${difficulty}_${variableHash}`
   }
 
   private static fillTemplate(template: CrisisTemplate, variables: any, category: string) {
