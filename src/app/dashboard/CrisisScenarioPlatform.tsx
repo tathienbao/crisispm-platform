@@ -32,12 +32,18 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
     try {
       setIsLoading(true)
       
+      // Check if userId is available
+      if (!userId) {
+        console.log('User ID not available yet, skipping initialization')
+        return
+      }
+      
       // Load user progress stats
       const stats = await UserProgressManager.getProgressStats(userId)
       setProgressStats(stats)
 
       // Generate initial scenario
-      generateNewScenario(stats)
+      await generateNewScenario(stats)
     } catch (error) {
       console.error('Error initializing platform:', error)
     } finally {
@@ -67,7 +73,7 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
     }
   }
 
-  const generateNewScenario = (stats?: ProgressStats) => {
+  const generateNewScenario = async (stats?: ProgressStats) => {
     try {
       const currentStats = stats || progressStats
       
@@ -80,12 +86,13 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
         used_scenarios: [] // In real implementation, load from database
       }
 
+      // Use AI-powered generation instead of templates
       const scenario = filters.category || filters.difficulty 
-        ? CrisisGenerator.generateScenario({
+        ? await CrisisGenerator.generateAIScenario({
             category: filters.category as any,
             difficulty: filters.difficulty || undefined
           })
-        : CrisisGenerator.generateDailyScenario(userProfile)
+        : await CrisisGenerator.generateAIDailyScenario(userProfile)
 
       // Add required fields for display
       const displayScenario: CrisisScenario = {
@@ -96,7 +103,37 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
 
       setCurrentScenario(displayScenario)
     } catch (error) {
-      console.error('Error generating scenario:', error)
+      console.error('Error generating AI scenario:', error)
+      console.log('Falling back to template generation...')
+      
+      // Fallback to template generation if AI fails
+      try {
+        const currentStats = stats || progressStats
+        const userProfile = {
+          difficulty: (filters.difficulty || (currentStats?.totalCompleted || 0) < 5 ? 'beginner' : 'intermediate') as 'beginner' | 'intermediate' | 'advanced',
+          categories: filters.category ? [filters.category] : [],
+          total_crises: currentStats?.totalCompleted || 0,
+          average_score: currentStats?.averageRating || 0,
+          used_scenarios: []
+        }
+
+        const fallbackScenario = filters.category || filters.difficulty 
+          ? CrisisGenerator.generateScenario({
+              category: filters.category as any,
+              difficulty: filters.difficulty || undefined
+            })
+          : CrisisGenerator.generateDailyScenario(userProfile)
+
+        const displayScenario: CrisisScenario = {
+          id: `scenario_${Date.now()}`,
+          created_at: new Date().toISOString(),
+          ...fallbackScenario
+        }
+
+        setCurrentScenario(displayScenario)
+      } catch (fallbackError) {
+        console.error('Fallback generation also failed:', fallbackError)
+      }
     }
   }
 
@@ -135,19 +172,19 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
     }
   }
 
-  const handleCategorySelect = (category: string) => {
+  const handleCategorySelect = async (category: string) => {
     setFilters({ ...filters, category })
-    generateNewScenario()
+    await generateNewScenario()
   }
 
-  const handleDifficultySelect = (difficulty: 'beginner' | 'intermediate' | 'advanced') => {
+  const handleDifficultySelect = async (difficulty: 'beginner' | 'intermediate' | 'advanced') => {
     setFilters({ ...filters, difficulty })
-    generateNewScenario()
+    await generateNewScenario()
   }
 
-  const clearFilters = () => {
+  const clearFilters = async () => {
     setFilters({ category: '', difficulty: '' })
-    generateNewScenario()
+    await generateNewScenario()
   }
 
   if (isLoading) {
@@ -297,7 +334,7 @@ export default function CrisisScenarioPlatform({ userId, userEmail }: CrisisScen
                   onClick={() => generateNewScenario()}
                   className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
-                  Generate New Scenario
+                  Generate New AI Scenario
                 </button>
               </div>
 

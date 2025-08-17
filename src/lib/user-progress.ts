@@ -259,6 +259,12 @@ export class UserProgressManager {
 
   private static async calculateProgressStats(userId: string): Promise<ProgressStats> {
     try {
+      // Validate userId
+      if (!userId) {
+        console.log('No userId provided to calculateProgressStats, returning defaults')
+        return this.getDefaultProgressStats()
+      }
+
       // Get all user completions
       const supabase = createClient()
       const { data: responses, error } = await supabase
