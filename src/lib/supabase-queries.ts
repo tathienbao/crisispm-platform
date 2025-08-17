@@ -103,7 +103,40 @@ export class UserProfileQueries {
  */
 export class CrisisScenarioQueries {
   /**
+   * Generate AI-powered crisis scenario for user and save it to database
+   * NEW: Uses AI generation instead of pre-stored scenarios
+   */
+  static async generateAIScenarioForUser(userId: string): Promise<CrisisScenario | null> {
+    try {
+      // Get user profile for personalization
+      const profile = await UserProfileQueries.getProfile(userId)
+      if (!profile) return null
+
+      // Get user's crisis history to avoid duplicates
+      const usedScenarios = await UserProfileQueries.getUserCrisisHistory(userId)
+
+      // Generate new AI-powered scenario
+      const generatedScenario = await CrisisGenerator.generateAIDailyScenario({
+        difficulty: profile.difficulty,
+        categories: profile.categories,
+        total_crises: profile.total_crises,
+        average_score: profile.average_score,
+        used_scenarios: usedScenarios
+      })
+
+      // Store generated scenario in database with user association
+      const storedScenario = await this.storeUserScenario(generatedScenario, userId)
+      return storedScenario
+    } catch (error) {
+      console.error('Error generating AI scenario for user:', error)
+      // Fallback to template-based generation
+      return this.getDailyScenario(userId)
+    }
+  }
+
+  /**
    * Get random crisis scenario for user based on their preferences
+   * LEGACY: Template-based generation (kept for fallback)
    */
   static async getDailyScenario(userId: string): Promise<CrisisScenario | null> {
     try {
@@ -182,6 +215,32 @@ export class CrisisScenarioQueries {
 
     if (error) {
       console.error('Error storing crisis scenario:', error)
+      return null
+    }
+
+    return data
+  }
+
+  /**
+   * Store AI-generated scenario with user association
+   * NEW: Enhanced storage for user-specific AI scenarios
+   */
+  static async storeUserScenario(scenario: CrisisScenarioInsert, userId: string): Promise<CrisisScenario | null> {
+    // Enhanced scenario data with user tracking
+    const enhancedScenario = {
+      ...scenario,
+      // Add metadata for user-generated scenarios
+      template_id: `${scenario.template_id}_USER_${userId}_${Date.now()}`
+    }
+
+    const { data, error } = await supabase
+      .from('crisis_scenarios')
+      .insert(enhancedScenario)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error storing user crisis scenario:', error)
       return null
     }
 
